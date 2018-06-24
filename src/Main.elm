@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-module Main exposing (..)
-=======
-port module Signup exposing (..)
->>>>>>> develop
+port module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style, type_, id)
@@ -10,11 +6,7 @@ import Material
 import Material.Textfield as Textfield exposing(..)
 import Material.Scheme
 import Material.Button as Button
-<<<<<<< HEAD
-import Material.Options as Options exposing (css)
-=======
 import Material.Options as Options exposing (css, onInput)
->>>>>>> develop
 import Material.Layout as Layout
 import Material.Typography as Typo
 import Material.Color as Color
@@ -26,26 +18,13 @@ type alias Mdl =
 
 type alias Model =
     { count : Int
-<<<<<<< HEAD
-=======
     , email : String
->>>>>>> develop
     , mdl :
         Material.Model
         -- Boilerplate: model store for any and all Mdl components you use.
     }
 
 
-<<<<<<< HEAD
-model : Model
-model =
-    { count = 0
-    , mdl =
-        Material.model
-        -- Boilerplate: Always use this initial Mdl model store.
-    }
-=======
->>>>>>> develop
 
 model : Model
 model =
@@ -57,22 +36,13 @@ model =
     }
 
 
-<<<<<<< HEAD
--- ACTION, UPDATE
-
-=======
->>>>>>> develop
 
 -- ACTION, UPDATE
 type Msg
     = Register
     | Reset
     | NewMessage String
-<<<<<<< HEAD
-    | NoOp
-=======
     | ChangeEmail String
->>>>>>> develop
     | Mdl (Material.Msg Msg)
 
 
@@ -95,25 +65,6 @@ update msg model =
               { model | count = model.count - 1}
             , Cmd.none
             )
-<<<<<<< HEAD
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
-        NoOp ->
-            ( model, Cmd.none )
-
-
-
-
-view : Model -> Html Msg
-view model = Layout.render Mdl model.mdl
-  [ Layout.fixedHeader
-  ]
-  { header = [  ]
-  , drawer = [  ]
-  , tabs = ([ text "Milk", text "Oranges" ], [])
-  , main = [ mainContent model ]
-  }
-=======
         ChangeEmail mail ->
             ( { model | email = mail } , Cmd.none )
         Mdl msg_ ->
@@ -122,7 +73,6 @@ view model = Layout.render Mdl model.mdl
 
 view : Model -> Html Msg
 view model = mainContent model
->>>>>>> develop
 
 mainContent : Model -> Html Msg
 mainContent model =
@@ -144,10 +94,7 @@ mainContent model =
                 [ Textfield.label "Email"
                 , Textfield.floatingLabel
                 , Textfield.text_
-<<<<<<< HEAD
-=======
                 , Options.onInput (ChangeEmail)
->>>>>>> develop
                 ]
                 []
               ]
@@ -167,23 +114,16 @@ mainContent model =
                 ]
                 [ text "Registration"]
               ]
-<<<<<<< HEAD
-            , text (toString model.count)
-=======
             , dump model
->>>>>>> develop
             ]
         ]            
         |> Material.Scheme.topWithScheme Color.Teal Color.LightBlue
 
-<<<<<<< HEAD
-=======
 dump : Model -> Html msg
 dump model = div []
             [ text (String.concat ["Count: ", (toString model.count)] )
             , text (String.concat ["Email: ", model.email] )
             ]
->>>>>>> develop
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
