@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Signup exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style, type_, id)
@@ -6,7 +6,7 @@ import Material
 import Material.Textfield as Textfield exposing(..)
 import Material.Scheme
 import Material.Button as Button
-import Material.Options as Options exposing (css)
+import Material.Options as Options exposing (css, onInput)
 import Material.Layout as Layout
 import Material.Typography as Typo
 import Material.Color as Color
@@ -18,15 +18,18 @@ type alias Mdl =
 
 type alias Model =
     { count : Int
+    , email : String
     , mdl :
         Material.Model
         -- Boilerplate: model store for any and all Mdl components you use.
     }
 
 
+
 model : Model
 model =
     { count = 0
+    , email = ""
     , mdl =
         Material.model
         -- Boilerplate: Always use this initial Mdl model store.
@@ -35,13 +38,11 @@ model =
 
 
 -- ACTION, UPDATE
-
-
 type Msg
     = Register
     | Reset
     | NewMessage String
-    | NoOp
+    | ChangeEmail String
     | Mdl (Material.Msg Msg)
 
 
@@ -64,23 +65,14 @@ update msg model =
               { model | count = model.count - 1}
             , Cmd.none
             )
+        ChangeEmail mail ->
+            ( { model | email = mail } , Cmd.none )
         Mdl msg_ ->
             Material.update Mdl msg_ model
-        NoOp ->
-            ( model, Cmd.none )
-
-
-
+        
 
 view : Model -> Html Msg
-view model = Layout.render Mdl model.mdl
-  [ Layout.fixedHeader
-  ]
-  { header = [  ]
-  , drawer = [  ]
-  , tabs = ([ text "Milk", text "Oranges" ], [])
-  , main = [ mainContent model ]
-  }
+view model = mainContent model
 
 mainContent : Model -> Html Msg
 mainContent model =
@@ -102,6 +94,7 @@ mainContent model =
                 [ Textfield.label "Email"
                 , Textfield.floatingLabel
                 , Textfield.text_
+                , Options.onInput (ChangeEmail)
                 ]
                 []
               ]
@@ -121,11 +114,16 @@ mainContent model =
                 ]
                 [ text "Registration"]
               ]
-            , text (toString model.count)
+            , dump model
             ]
         ]            
         |> Material.Scheme.topWithScheme Color.Teal Color.LightBlue
 
+dump : Model -> Html msg
+dump model = div []
+            [ text (String.concat ["Count: ", (toString model.count)] )
+            , text (String.concat ["Email: ", model.email] )
+            ]
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
