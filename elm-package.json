@@ -19,5 +19,5 @@
         "krisajenkins/remotedata": "4.5.0 <= v < 5.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0",
-    "homepage": "https://kmstp.github.io/web-signup"
+    "homepage": "https://kmstp.github.io/web-signup/"
 }
