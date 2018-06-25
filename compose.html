@@ -1,15 +1,17 @@
 <html>
   <body>
-          <div id='main1' />
+    <div id='main1' />
   </body>
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   
   <script src="Signup.js"></script>
   <script>
     function embedNode(component, id) {
       var node = document.getElementById(id);
-      component.embed(node);
+      var app = component.embed(node);
+      app.ports.wsMessage.subscribe(function(msg){
+        console.log(msg);
+      })
     }
-    embedNode(Elm.Signup, 'main1');
+    embedNode(Elm.Main, 'main1');
   </script>
 </html>
