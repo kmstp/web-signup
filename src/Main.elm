@@ -1,17 +1,16 @@
 port module Main exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (href, class, style, type_, id)
+import Html.Attributes exposing (style)
 import Material
 import Material.Textfield as Textfield exposing(..)
 import Material.Scheme
 import Material.Button as Button
 import Material.Options as Options exposing (css, onInput)
-import Material.Layout as Layout
 import Material.Typography as Typo
 import Material.Color as Color
 import WebSocket
-
+import Time exposing (Time, second)
 -- MODEL
 type alias Mdl =
     Material.Model
@@ -19,6 +18,9 @@ type alias Mdl =
 type alias Model =
     { count : Int
     , email : String
+    , name : String
+    , password : String
+    , passwordAgain : String 
     , mdl :
         Material.Model
         -- Boilerplate: model store for any and all Mdl components you use.
@@ -30,6 +32,9 @@ model : Model
 model =
     { count = 0
     , email = ""
+    , name = ""
+    , password = ""
+    , passwordAgain = ""
     , mdl =
         Material.model
         -- Boilerplate: Always use this initial Mdl model store.
@@ -43,6 +48,9 @@ type Msg
     | Reset
     | NewMessage String
     | ChangeEmail String
+    | Password String
+    | PasswordAgain String
+    | Tick Time
     | Mdl (Material.Msg Msg)
 
 
@@ -63,10 +71,20 @@ update msg model =
             in
             (
               { model | count = model.count - 1}
-            , Cmd.none
+            , Cmd.batch [
+                wsMessage str
+              ]
             )
-        ChangeEmail mail ->
+        ChangeEmail mail -> 
             ( { model | email = mail } , Cmd.none )
+        Password password ->
+            ( { model | password = password }, Cmd.none )
+        PasswordAgain password ->
+            ( { model | passwordAgain = password }, Cmd.none )
+        Tick newTime ->
+            ( { model | count = model.count + 1 }
+            , Cmd.none
+            )      
         Mdl msg_ ->
             Material.update Mdl msg_ model
         
@@ -103,21 +121,43 @@ mainContent model =
                 [ Textfield.label "Password"
                 , Textfield.floatingLabel
                 , Textfield.password
+                , Options.onInput (Password)
                 ]
                 []
               ]
+            , div []
+              [ Textfield.render Mdl [4] model.mdl
+                [ Textfield.label "Password again"
+                , Textfield.floatingLabel
+                , Textfield.password
+                , Options.onInput (PasswordAgain)
+                ]
+                []
+              ]
+            , viewValidation model 
             , div []
               [ Button.render Mdl [4] model.mdl
                 [ Button.raised
                 , Button.ripple
                 , Options.onClick Register
                 ]
-                [ text "Registration"]
+                [ text "Register"]
               ]
             , dump model
             ]
         ]            
         |> Material.Scheme.topWithScheme Color.Teal Color.LightBlue
+
+viewValidation : Model -> Html msg
+viewValidation model =
+    let
+      (color, message) =
+        if model.password == model.passwordAgain then
+          ("green", "OK")
+        else
+          ("red", "Passwords do not match!")
+    in
+      div [ style [("color", color)] ] [ text message ]
 
 dump : Model -> Html msg
 dump model = div []
@@ -127,7 +167,13 @@ dump model = div []
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  WebSocket.listen "ws://echo.websocket.org" NewMessage
+  Sub.batch [
+    Time.every second Tick
+  , WebSocket.listen "ws://echo.websocket.org" NewMessage
+  ]
+
+port wsMessage : String -> Cmd msg
+
 
 main : Program Never Model Msg
 main =

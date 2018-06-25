@@ -15888,7 +15888,7 @@ var _elm_lang$websocket$WebSocket$onSelfMsg = F3(
 	});
 _elm_lang$core$Native_Platform.effectManagers['WebSocket'] = {pkg: 'elm-lang/websocket', init: _elm_lang$websocket$WebSocket$init, onEffects: _elm_lang$websocket$WebSocket$onEffects, onSelfMsg: _elm_lang$websocket$WebSocket$onSelfMsg, tag: 'fx', cmdMap: _elm_lang$websocket$WebSocket$cmdMap, subMap: _elm_lang$websocket$WebSocket$subMap};
 
-var _user$project$Signup$dump = function (model) {
+var _user$project$Main$dump = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -15922,18 +15922,45 @@ var _user$project$Signup$dump = function (model) {
 			}
 		});
 };
-var _user$project$Signup$model = {count: 0, email: '', mdl: _debois$elm_mdl$Material$model};
-var _user$project$Signup$Model = F3(
-	function (a, b, c) {
-		return {count: a, email: b, mdl: c};
+var _user$project$Main$viewValidation = function (model) {
+	var _p0 = _elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain) ? {ctor: '_Tuple2', _0: 'green', _1: 'OK'} : {ctor: '_Tuple2', _0: 'red', _1: 'Passwords do not match!'};
+	var color = _p0._0;
+	var message = _p0._1;
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'color', _1: color},
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(message),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$model = {count: 0, email: '', name: '', password: '', passwordAgain: '', mdl: _debois$elm_mdl$Material$model};
+var _user$project$Main$wsMessage = _elm_lang$core$Native_Platform.outgoingPort(
+	'wsMessage',
+	function (v) {
+		return v;
 	});
-var _user$project$Signup$Mdl = function (a) {
+var _user$project$Main$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {count: a, email: b, name: c, password: d, passwordAgain: e, mdl: f};
+	});
+var _user$project$Main$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
-var _user$project$Signup$update = F2(
+var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'Register':
 				return {
 					ctor: '_Tuple2',
@@ -15952,38 +15979,86 @@ var _user$project$Signup$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'NewMessage':
-				var _p1 = A2(_elm_lang$core$Debug$log, 'New message: ', _p0._0);
+				var _p3 = _p1._0;
+				var _p2 = A2(_elm_lang$core$Debug$log, 'New message: ', _p3);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{count: model.count - 1}),
-					_1: _elm_lang$core$Platform_Cmd$none
+					_1: _elm_lang$core$Platform_Cmd$batch(
+						{
+							ctor: '::',
+							_0: _user$project$Main$wsMessage(_p3),
+							_1: {ctor: '[]'}
+						})
 				};
 			case 'ChangeEmail':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{email: _p0._0}),
+						{email: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Password':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{password: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PasswordAgain':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{passwordAgain: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Tick':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{count: model.count + 1}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
-				return A3(_debois$elm_mdl$Material$update, _user$project$Signup$Mdl, _p0._0, model);
+				return A3(_debois$elm_mdl$Material$update, _user$project$Main$Mdl, _p1._0, model);
 		}
 	});
-var _user$project$Signup$ChangeEmail = function (a) {
+var _user$project$Main$Tick = function (a) {
+	return {ctor: 'Tick', _0: a};
+};
+var _user$project$Main$PasswordAgain = function (a) {
+	return {ctor: 'PasswordAgain', _0: a};
+};
+var _user$project$Main$Password = function (a) {
+	return {ctor: 'Password', _0: a};
+};
+var _user$project$Main$ChangeEmail = function (a) {
 	return {ctor: 'ChangeEmail', _0: a};
 };
-var _user$project$Signup$NewMessage = function (a) {
+var _user$project$Main$NewMessage = function (a) {
 	return {ctor: 'NewMessage', _0: a};
 };
-var _user$project$Signup$subscriptions = function (model) {
-	return A2(_elm_lang$websocket$WebSocket$listen, 'ws://echo.websocket.org', _user$project$Signup$NewMessage);
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Main$Tick),
+			_1: {
+				ctor: '::',
+				_0: A2(_elm_lang$websocket$WebSocket$listen, 'ws://echo.websocket.org', _user$project$Main$NewMessage),
+				_1: {ctor: '[]'}
+			}
+		});
 };
-var _user$project$Signup$Reset = {ctor: 'Reset'};
-var _user$project$Signup$Register = {ctor: 'Register'};
-var _user$project$Signup$mainContent = function (model) {
+var _user$project$Main$Reset = {ctor: 'Reset'};
+var _user$project$Main$Register = {ctor: 'Register'};
+var _user$project$Main$mainContent = function (model) {
 	return A3(
 		_debois$elm_mdl$Material_Scheme$topWithScheme,
 		_debois$elm_mdl$Material_Color$Teal,
@@ -16020,7 +16095,7 @@ var _user$project$Signup$mainContent = function (model) {
 									ctor: '::',
 									_0: A5(
 										_debois$elm_mdl$Material_Textfield$render,
-										_user$project$Signup$Mdl,
+										_user$project$Main$Mdl,
 										{
 											ctor: '::',
 											_0: 1,
@@ -16052,7 +16127,7 @@ var _user$project$Signup$mainContent = function (model) {
 										ctor: '::',
 										_0: A5(
 											_debois$elm_mdl$Material_Textfield$render,
-											_user$project$Signup$Mdl,
+											_user$project$Main$Mdl,
 											{
 												ctor: '::',
 												_0: 2,
@@ -16070,7 +16145,7 @@ var _user$project$Signup$mainContent = function (model) {
 														_0: _debois$elm_mdl$Material_Textfield$text_,
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$onInput(_user$project$Signup$ChangeEmail),
+															_0: _debois$elm_mdl$Material_Options$onInput(_user$project$Main$ChangeEmail),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -16088,7 +16163,7 @@ var _user$project$Signup$mainContent = function (model) {
 											ctor: '::',
 											_0: A5(
 												_debois$elm_mdl$Material_Textfield$render,
-												_user$project$Signup$Mdl,
+												_user$project$Main$Mdl,
 												{
 													ctor: '::',
 													_0: 3,
@@ -16104,7 +16179,11 @@ var _user$project$Signup$mainContent = function (model) {
 														_1: {
 															ctor: '::',
 															_0: _debois$elm_mdl$Material_Textfield$password,
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$onInput(_user$project$Main$Password),
+																_1: {ctor: '[]'}
+															}
 														}
 													}
 												},
@@ -16119,8 +16198,8 @@ var _user$project$Signup$mainContent = function (model) {
 											{
 												ctor: '::',
 												_0: A5(
-													_debois$elm_mdl$Material_Button$render,
-													_user$project$Signup$Mdl,
+													_debois$elm_mdl$Material_Textfield$render,
+													_user$project$Main$Mdl,
 													{
 														ctor: '::',
 														_0: 4,
@@ -16129,28 +16208,69 @@ var _user$project$Signup$mainContent = function (model) {
 													model.mdl,
 													{
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Button$raised,
+														_0: _debois$elm_mdl$Material_Textfield$label('Password again'),
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Button$ripple,
+															_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
 															_1: {
 																ctor: '::',
-																_0: _debois$elm_mdl$Material_Options$onClick(_user$project$Signup$Register),
-																_1: {ctor: '[]'}
+																_0: _debois$elm_mdl$Material_Textfield$password,
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$onInput(_user$project$Main$PasswordAgain),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Registration'),
-														_1: {ctor: '[]'}
-													}),
+													{ctor: '[]'}),
 												_1: {ctor: '[]'}
 											}),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Signup$dump(model),
-											_1: {ctor: '[]'}
+											_0: _user$project$Main$viewValidation(model),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A5(
+															_debois$elm_mdl$Material_Button$render,
+															_user$project$Main$Mdl,
+															{
+																ctor: '::',
+																_0: 4,
+																_1: {ctor: '[]'}
+															},
+															model.mdl,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Button$raised,
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Button$ripple,
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$onClick(_user$project$Main$Register),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Register'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Main$dump(model),
+													_1: {ctor: '[]'}
+												}
+											}
 										}
 									}
 								}
@@ -16160,21 +16280,21 @@ var _user$project$Signup$mainContent = function (model) {
 				}
 			}));
 };
-var _user$project$Signup$view = function (model) {
-	return _user$project$Signup$mainContent(model);
+var _user$project$Main$view = function (model) {
+	return _user$project$Main$mainContent(model);
 };
-var _user$project$Signup$main = _elm_lang$html$Html$program(
+var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
-		init: {ctor: '_Tuple2', _0: _user$project$Signup$model, _1: _elm_lang$core$Platform_Cmd$none},
-		view: _user$project$Signup$view,
-		subscriptions: _user$project$Signup$subscriptions,
-		update: _user$project$Signup$update
+		init: {ctor: '_Tuple2', _0: _user$project$Main$model, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$Main$view,
+		subscriptions: _user$project$Main$subscriptions,
+		update: _user$project$Main$update
 	})();
 
 var Elm = {};
-Elm['Signup'] = Elm['Signup'] || {};
-if (typeof _user$project$Signup$main !== 'undefined') {
-    _user$project$Signup$main(Elm['Signup'], 'Signup', undefined);
+Elm['Main'] = Elm['Main'] || {};
+if (typeof _user$project$Main$main !== 'undefined') {
+    _user$project$Main$main(Elm['Main'], 'Main', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
