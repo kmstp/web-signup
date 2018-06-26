@@ -16,7 +16,6 @@ type alias Mdl =
     Material.Model
 
 type alias Model =
-<<<<<<< HEAD
   { count : Int
   , email : String
   , name : String
@@ -174,7 +173,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [
     Time.every second Tick
-    WebSocket.listen "wss://echo.websocket.org" NewMessage
+  , WebSocket.listen "wss://echo.websocket.org" NewMessage
   ]
 
 port wsMessage : String -> Cmd msg
