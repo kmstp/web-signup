@@ -16,16 +16,20 @@ type alias Mdl =
     Material.Model
 
 type alias Model =
-    { count : Int
-    , email : String
-    , name : String
-    , password : String
-    , passwordAgain : String 
-    , mdl :
-        Material.Model
-        -- Boilerplate: model store for any and all Mdl components you use.
-    }
+  { count : Int
+  , email : String
+  , name : String
+  , password : String
+  , passwordAgain : String 
+  , mdl :
+      Material.Model
+      -- Boilerplate: model store for any and all Mdl components you use.
+  }
 
+type alias Flags =
+  {
+    
+  }
 
 
 model : Model
@@ -59,7 +63,7 @@ update msg model =
     case msg of
         Register ->
             ( model
-            , WebSocket.send "ws://echo.websocket.org" (toString  model.count)
+            , WebSocket.send "wss://echo.websocket.org" (toString  model.count)
             )
 
         Reset ->
@@ -169,7 +173,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [
     Time.every second Tick
-  , WebSocket.listen "ws://echo.websocket.org" NewMessage
+  , WebSocket.listen "wss://echo.websocket.org" NewMessage
   ]
 
 port wsMessage : String -> Cmd msg
