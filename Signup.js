@@ -15954,7 +15954,10 @@ var _user$project$Main$Model = F6(
 	function (a, b, c, d, e, f) {
 		return {count: a, email: b, name: c, password: d, passwordAgain: e, mdl: f};
 	});
+<<<<<<< HEAD
 var _user$project$Main$Flags = {};
+=======
+>>>>>>> 23e05244714ba6583372379de586460578b914af
 var _user$project$Main$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
@@ -16052,7 +16055,11 @@ var _user$project$Main$subscriptions = function (model) {
 			_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Main$Tick),
 			_1: {
 				ctor: '::',
+<<<<<<< HEAD
 				_0: A2(_elm_lang$websocket$WebSocket$listen, 'wss://echo.websocket.org', _user$project$Main$NewMessage),
+=======
+				_0: A2(_elm_lang$websocket$WebSocket$listen, 'ws://echo.websocket.org', _user$project$Main$NewMessage),
+>>>>>>> 23e05244714ba6583372379de586460578b914af
 				_1: {ctor: '[]'}
 			}
 		});
