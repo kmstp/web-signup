@@ -15954,6 +15954,7 @@ var _user$project$Main$Model = F6(
 	function (a, b, c, d, e, f) {
 		return {count: a, email: b, name: c, password: d, passwordAgain: e, mdl: f};
 	});
+var _user$project$Main$Flags = {};
 var _user$project$Main$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
@@ -15967,7 +15968,7 @@ var _user$project$Main$update = F2(
 					_0: model,
 					_1: A2(
 						_elm_lang$websocket$WebSocket$send,
-						'ws://echo.websocket.org',
+						'wss://echo.websocket.org',
 						_elm_lang$core$Basics$toString(model.count))
 				};
 			case 'Reset':
@@ -16051,7 +16052,7 @@ var _user$project$Main$subscriptions = function (model) {
 			_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Main$Tick),
 			_1: {
 				ctor: '::',
-				_0: A2(_elm_lang$websocket$WebSocket$listen, 'ws://echo.websocket.org', _user$project$Main$NewMessage),
+				_0: A2(_elm_lang$websocket$WebSocket$listen, 'wss://echo.websocket.org', _user$project$Main$NewMessage),
 				_1: {ctor: '[]'}
 			}
 		});
